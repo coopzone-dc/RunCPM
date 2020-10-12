@@ -2,11 +2,21 @@
 
 ** This version has been modified (in progress) to use the the FABGL library for ESP32 **
 
-You get a full 80x36 console on a VGA screen and keyboard. It can save your preferences(in the same way as ANSI TERMIAL Does.
+You get a full 80x36 console on a VGA screen and keyboard. It can save your preferences (in the same way as ANSI TERMIAL Does.)
 
-The code will be uploaded over the next few days
+No changes have been made the the other versions of RunCPM, Just the esp version.
 
-*****
+This has been done as a fork for easy updates between several computers i work on. Ultimatly i'm hoping i can convince the auther to merge these changes into the master branch. If you use this idea and version please let me know how you get on.
+
+IMPORTANT:
+I have used this version on two ESP32 systems. One was the popular VGA32 ESP V1.4 the other was a homemade version based on the wroom module, so far:
+
+My version of the hardware that used the SD card GPIO's that where the same as the ESP32 DevKit v1, works perfectly.
+
+However, the settings for the VGA32 ESP seem to have a conflict on the GPIO settings for the SD card. It does work but to upload you have to remove the SD card and after a soft reset you have to remove the SD card and then replace it followed by another reset. It works ok from a power on or hard reset. If you can help fix this please let me know.
+
+
+***************************************************************************************
 
 RunCPM is an application which can execute vintage CP/M 8 bits programs on many modern platforms, like Windows, Mac OS X, Linux, FreeBSD, MS-DOS, Arduino DUE and variants, like the Teensy or ESP32. It can be built both on 32 and 64 bits host environments and should be easily portable to other platforms.<br>
 RunCPM is fully written in C and in a modular way, so porting to other platforms should be only a matter of writing an abstraction layer file for it. No modification to the main code modules should be necessary.
