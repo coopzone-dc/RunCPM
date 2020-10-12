@@ -17,6 +17,8 @@ However, the settings for the VGA32 ESP seem to have a conflict on the GPIO sett
 
 ![https://github.com/coopzone-dc/RunCPM/blob/master/Docs/IMG_0561.jpg](https://github.com/coopzone-dc/RunCPM/blob/master/Docs/IMG_0561.jpg)
 
+![https://github.com/coopzone-dc/RunCPM/blob/master/Docs/IMG_0563.jpg](https://github.com/coopzone-dc/RunCPM/blob/master/Docs/IMG_0563.jpg)
+
 ***************************************************************************************
 
 RunCPM is an application which can execute vintage CP/M 8 bits programs on many modern platforms, like Windows, Mac OS X, Linux, FreeBSD, MS-DOS, Arduino DUE and variants, like the Teensy or ESP32. It can be built both on 32 and 64 bits host environments and should be easily portable to other platforms.<br>
