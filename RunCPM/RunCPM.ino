@@ -11,15 +11,36 @@
 // Board definitions go into the "hardware" folder
 // Choose/change a file from there
 #include "hardware/esp32.h"
+#define myCLK 14
+#define myMISO 2
+#define myMOSI 12 //was 12 not reloading properly
+#define SS 13
+#define LED 25
+//#define SDINIT 18=clk,19=miso,23=mosi,5=cs
+#define SDINIT myCLK,myMISO,myMOSI,SS// VGA32
+//#define SDINIT 18,19,23,5
 
 // Delays for LED blinking
 #define sDELAY 50
 #define DELAY 100
 
+#define FABGL true
+
+#ifdef FABGL
+#include "fabgl.h"
+
+fabgl::VGA16Controller DisplayController;
+fabgl::PS2Controller     PS2Controller;
+fabgl::Terminal          Terminal;
+
+#include "confdialog.h"
+
+#endif
+
 #include "abstraction_arduino.h"
 
 // Serial port speed
-#define SERIALSPD 9600
+#define SERIALSPD 115200
 
 // PUN: device configuration
 #ifdef USE_PUN
@@ -46,6 +67,53 @@ int lst_open = FALSE;
 void setup(void) {
   pinMode(LED, OUTPUT);
   digitalWrite(LED, LOW);
+
+#ifdef FABGL
+
+  preferences.begin("RunCPM", false);
+
+  PS2Controller.begin(PS2Preset::KeyboardPort0);
+
+// Use GPIO 22-21 for red, GPIO 19-18 for green, GPIO 5-4 for blue, GPIO 23 for HSync and GPIO 15 for VSync
+  DisplayController.begin();
+//  DisplayController.begin(GPIO_NUM_22,GPIO_NUM_21,GPIO_NUM_19,GPIO_NUM_18,GPIO_NUM_5,GPIO_NUM_17,GPIO_NUM_23,GPIO_NUM_16);
+
+//  DisplayController.setResolution();
+    DisplayController.setResolution(VGA_640x480_60Hz);
+
+  Terminal.begin(&DisplayController);
+  Terminal.connectLocally();      // to use Terminal.read(), available(), etc..
+
+  ConfDialogApp::loadConfiguration();
+
+  Terminal.enableCursor(true);
+
+  Terminal.onVirtualKey = [&](VirtualKey * vk, bool keyDown) {
+    if (*vk == VirtualKey::VK_F12) {
+      if (!keyDown) {
+        // releasing F12 key to open configuration dialog
+        Terminal.deactivate();
+        auto dlgApp = new ConfDialogApp;
+        dlgApp->run(&DisplayController);
+        delete dlgApp;
+        Terminal.keyboard()->emptyVirtualKeyQueue();
+        Terminal.activate();
+      } else {
+        // pressing CTRL + ALT + F12, reset parameters and reboot
+        if ((Terminal.keyboard()->isVKDown(VirtualKey::VK_LCTRL) || Terminal.keyboard()->isVKDown(VirtualKey::VK_RCTRL)) &&
+            (Terminal.keyboard()->isVKDown(VirtualKey::VK_LALT) || Terminal.keyboard()->isVKDown(VirtualKey::VK_RALT))) {
+          Terminal.write("\r\nReset of terminal settings...");
+          preferences.clear();
+          delay(2000);
+          Terminal.write("\r\nRebooting...");
+          delay(2000);
+          ESP.restart();
+        }
+      }
+      *vk = VirtualKey::VK_NONE;
+    }
+  };
+#else
   Serial.begin(SERIALSPD);
   while (!Serial) {	// Wait until serial is connected
     digitalWrite(LED, HIGH^LEDinv);
@@ -53,6 +121,7 @@ void setup(void) {
     digitalWrite(LED, LOW^LEDinv);
     delay(sDELAY);
   }
+#endif  
 
 #ifdef DEBUGLOG
   _sys_deletefile((uint8 *)LogName);

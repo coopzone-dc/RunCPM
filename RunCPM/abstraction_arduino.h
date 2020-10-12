@@ -485,26 +485,47 @@ uint8 _sys_makedisk(uint8 drive) {
 /*===============================================================================*/
 
 int _kbhit(void) {
+#ifdef FABGL
+  return(Terminal.available());
+#else
 	return(Serial.available());
+#endif
 }
 
 uint8 _getch(void) {
-	while (!Serial.available());
-	return(Serial.read());
+#ifdef FABGL
+ while (!Terminal.available());
+ return(Terminal.read());
+#else
+ while (!Serial.available());
+ return(Serial.read());
+#endif
 }
 
 uint8 _getche(void) {
 	uint8 ch = _getch();
-	Serial.write(ch);
+#ifdef FABGL
+  Terminal.write(ch);
+#else
+  Serial.write(ch);
+#endif
 	return(ch);
 }
 
 void _putch(uint8 ch) {
+#ifdef FABGL
+  Terminal.write(ch);
+#else
 	Serial.write(ch);
+#endif
 }
 
 void _clrscr(void) {
-	Serial.println("\e[H\e[J");
+#ifdef FABGL
+ Terminal.clear();
+#else
+ Serial.println("\e[H\e[J");
+#endif
 }
 
 #endif
