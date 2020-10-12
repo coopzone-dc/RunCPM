@@ -15,6 +15,7 @@ My version of the hardware that used the SD card GPIO's that where the same as t
 
 However, the settings for the VGA32 ESP seem to have a conflict on the GPIO settings for the SD card. It does work but to upload you have to remove the SD card and after a soft reset you have to remove the SD card and then replace it followed by another reset. It works ok from a power on or hard reset. If you can help fix this please let me know.
 
+![https://github.com/coopzone-dc/RunCPM/blob/master/Docs/IMG_0561.jpg](https://github.com/coopzone-dc/RunCPM/blob/master/Docs/IMG_0561.jpg)
 
 ***************************************************************************************
 
