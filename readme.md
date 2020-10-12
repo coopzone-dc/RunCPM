@@ -1,5 +1,13 @@
 # RunCPM - Z80 CP/M 2.2 emulator
 
+** This version has been modified (in progress) to use the the FABGL library for ESP32 **
+
+You get a full 80x36 console on a VGA screen and keyboard. It can save your preferences(in the same way as ANSI TERMIAL Does.
+
+The code will be uploaded over the next few days
+
+*****
+
 RunCPM is an application which can execute vintage CP/M 8 bits programs on many modern platforms, like Windows, Mac OS X, Linux, FreeBSD, MS-DOS, Arduino DUE and variants, like the Teensy or ESP32. It can be built both on 32 and 64 bits host environments and should be easily portable to other platforms.<br>
 RunCPM is fully written in C and in a modular way, so porting to other platforms should be only a matter of writing an abstraction layer file for it. No modification to the main code modules should be necessary.
 
