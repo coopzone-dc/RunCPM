@@ -2,6 +2,8 @@
 
 **** This version has been modified (in progress) to use the the FABGL library for ESP32 ****
 
+please see https://github.com/fdivitto/FabGL for the library used.
+
 You get a full 80x36 console on a VGA screen and keyboard. It can save your preferences (in the same way as ANSI TERMIAL Does.)
 
 No changes have been made the the other versions of RunCPM, just the esp version.
