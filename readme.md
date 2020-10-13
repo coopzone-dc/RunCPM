@@ -43,7 +43,7 @@ This further notes that GPIO12 should be avoided, a pitty no one told the maker 
 FIXED: I have tried the option of setting the flash voltage to overide the use of GPIO12 and can confirm on my vga32 ESP, it Works! Problem fixed no more issues with the SD Card. I urge you to check, double check and think carefully about creating a BRICK if you decide to try it as well. I am not recommending it as an action, but for me it worked.
 
 UPDATE 13oct2020:
-When you build this version, make sure you use the IDE library manager to add the FabGL libraries, If you use the version on Github you will need to make changes to the Menu Dialogue. There is a difference between the two.
+When you build this version, make sure you use the IDE library manager to add the FabGL libraries, If you use the version on Github you may need to make changes to the Menu Dialogue. There is a difference between the two.
 
 ![https://github.com/coopzone-dc/RunCPM/blob/master/Docs/IMG_0561.jpg](https://github.com/coopzone-dc/RunCPM/blob/master/Docs/IMG_0561.jpg)
 
