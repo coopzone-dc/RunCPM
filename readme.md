@@ -1,19 +1,43 @@
 # RunCPM - Z80 CP/M 2.2 emulator
 
-** This version has been modified (in progress) to use the the FABGL library for ESP32 **
+**** This version has been modified (in progress) to use the the FABGL library for ESP32 ****
 
 You get a full 80x36 console on a VGA screen and keyboard. It can save your preferences (in the same way as ANSI TERMIAL Does.)
 
-No changes have been made the the other versions of RunCPM, Just the esp version.
+No changes have been made the the other versions of RunCPM, just the esp version.
 
 This has been done as a fork for easy updates between several computers i work on. Ultimatly i'm hoping i can convince the auther to merge these changes into the master branch. If you use this idea and version please let me know how you get on.
 
-IMPORTANT:
-I have used this version on two ESP32 systems. One was the popular VGA32 ESP V1.4 the other was a homemade version based on the wroom module, so far:
+# IMPORTANT NOTES:
 
-My version of the hardware that used the SD card GPIO's that where the same as the ESP32 DevKit v1, works perfectly.
+I have used this version of RunCPM on two ESP32 systems so far
+
+1, The VGA32 ESP V1.4, a popular self conatined board with VGA/Keyboard/Mouse/SDcard all in one. See bellow for issues/fixes
+
+2, Homemade version based on the wroom module, with SDCARD/Keyboard and VGA output added as per FABGL generic circuit. See wiki for a picture of it.
+
+so far:
+
+My version of the hardware that used the SD card GPIO's that where suggested on the generic circuit and works perfectly.
 
 However, the settings for the VGA32 ESP seem to have a conflict on the GPIO settings for the SD card. It does work but to upload you have to remove the SD card and after a soft reset you have to remove the SD card and then replace it followed by another reset. It works ok from a power on or hard reset. If you can help fix this please let me know.
+UPDATE:
+The VGA32 ESP v1.4 uses GPIO12 (MTDI, read on pwerup/reset). This pin determines the voltage for the RAM, Voltage of Internal LDO (VDD_SDIO). When the SD card is present it pulls this pin high and the ESP32 thinks that the RAM voltage should be 1.8V, without the SD card this pin has internal pull-down to set the RAM voltage to 3.3V.
+This is actually mentioned in the notes from examples provided on the FABGL project, to quote:
+
+// notes about GPIO 2 and 12
+//    - GPIO2:  may cause problem on programming. GPIO2 must also be either left unconnected/floating, or driven Low, in order to enter the serial bootloader.
+//              In normal boot mode (GPIO0 high), GPIO2 is ignored.
+//    - GPIO12: should be avoided. It selects flash voltage. To use it disable GPIO12 detection setting efuses with:
+//                    python espefuse.py --port /dev/cu.SLAB_USBtoUART set_flash_voltage 3.3V
+//                       WARN!! Good for ESP32 with 3.3V voltage (ESP-WROOM-32). This will BRICK your ESP32 if the flash isn't 3.3V
+//                       NOTE1: replace "/dev/cu.SLAB_USBtoUART" with your serial port
+//                       NOTE2: espefuse.py is downloadable from https://github.com/espressif/esptool
+
+This further notes that GPIO12 should be avoided, a pitty no one told the maker of the VGA32 ESP card!
+
+FIXED: I have tried the option of setting the flash voltage to overide the use of GPIO12 and can confirm on my vga32 ESP, it Works! Problem fixed no more issues with the SD Card. I urge you to check, double check and think carefully about creating a BRICK if you decide to try it as well. I am not recommending it as an action, but for me it worked.
+
 
 ![https://github.com/coopzone-dc/RunCPM/blob/master/Docs/IMG_0561.jpg](https://github.com/coopzone-dc/RunCPM/blob/master/Docs/IMG_0561.jpg)
 
