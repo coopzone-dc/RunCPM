@@ -23,31 +23,25 @@ so far:
 My version of the hardware that used the SD card GPIO's that where suggested on the generic circuit and works perfectly.
 
 However, the settings for the VGA32 ESP seem to have a conflict on the GPIO settings for the SD card. It does work but to upload you have to remove the SD card and after a soft reset you have to remove the SD card and then replace it followed by another reset. It works ok from a power on or hard reset. If you can help fix this please let me know.
-UPDATE:
+UPDATE 11Oct2020:
 The VGA32 ESP v1.4 uses GPIO12 (MTDI, read on pwerup/reset). This pin determines the voltage for the RAM, Voltage of Internal LDO (VDD_SDIO). When the SD card is present it pulls this pin high and the ESP32 thinks that the RAM voltage should be 1.8V, without the SD card this pin has internal pull-down to set the RAM voltage to 3.3V.
 This is actually mentioned in the notes from examples provided on the FABGL project, to quote:
 
 // notes about GPIO 2 and 12
-
 //    - GPIO2:  may cause problem on programming. GPIO2 must also be either left unconnected/floating, or driven Low, in order to enter the serial bootloader.
-
 //              In normal boot mode (GPIO0 high), GPIO2 is ignored.
-
 //    - GPIO12: should be avoided. It selects flash voltage. To use it disable GPIO12 detection setting efuses with:
-
 //                    python espefuse.py --port /dev/cu.SLAB_USBtoUART set_flash_voltage 3.3V
-
 //                       WARN!! Good for ESP32 with 3.3V voltage (ESP-WROOM-32). This will BRICK your ESP32 if the flash isn't 3.3V
-
 //                       NOTE1: replace "/dev/cu.SLAB_USBtoUART" with your serial port
-
 //                       NOTE2: espefuse.py is downloadable from https://github.com/espressif/esptool
-
 
 This further notes that GPIO12 should be avoided, a pitty no one told the maker of the VGA32 ESP card!
 
 FIXED: I have tried the option of setting the flash voltage to overide the use of GPIO12 and can confirm on my vga32 ESP, it Works! Problem fixed no more issues with the SD Card. I urge you to check, double check and think carefully about creating a BRICK if you decide to try it as well. I am not recommending it as an action, but for me it worked.
 
+UPDATE 13oct2020:
+When you build this version, make sure you use the IDE library manager to add the FabGL libraries, If you use the version on Github you will need to make changes to the Menu Dialogue. There is a difference betwwen the two.
 
 ![https://github.com/coopzone-dc/RunCPM/blob/master/Docs/IMG_0561.jpg](https://github.com/coopzone-dc/RunCPM/blob/master/Docs/IMG_0561.jpg)
 
