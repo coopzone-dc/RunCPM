@@ -26,7 +26,7 @@ However, the settings for the VGA32 ESP seem to have a conflict on the GPIO sett
 UPDATE 11Oct2020:
 The VGA32 ESP v1.4 uses GPIO12 (MTDI, read on pwerup/reset). This pin determines the voltage for the RAM, Voltage of Internal LDO (VDD_SDIO). When the SD card is present it pulls this pin high and the ESP32 thinks that the RAM voltage should be 1.8V, without the SD card this pin has internal pull-down to set the RAM voltage to 3.3V.
 This is actually mentioned in the notes from examples provided on the FABGL project, to quote:
-
+<pre>
  notes about GPIO 2 and 12
     - GPIO2:  may cause problem on programming. GPIO2 must also be either left unconnected/floating, or driven Low, in order to enter the serial bootloader.
               In normal boot mode (GPIO0 high), GPIO2 is ignored.
@@ -35,7 +35,7 @@ This is actually mentioned in the notes from examples provided on the FABGL proj
                        WARN!! Good for ESP32 with 3.3V voltage (ESP-WROOM-32). This will BRICK your ESP32 if the flash isn't 3.3V
                        NOTE1: replace "/dev/cu.SLAB_USBtoUART" with your serial port
                        NOTE2: espefuse.py is downloadable from https://github.com/espressif/esptool
-
+</pre>
 This further notes that GPIO12 should be avoided, a pitty no one told the maker of the VGA32 ESP card!
 
 FIXED: I have tried the option of setting the flash voltage to overide the use of GPIO12 and can confirm on my vga32 ESP, it Works! Problem fixed no more issues with the SD Card. I urge you to check, double check and think carefully about creating a BRICK if you decide to try it as well. I am not recommending it as an action, but for me it worked.
