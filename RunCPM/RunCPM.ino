@@ -11,30 +11,23 @@
 // Board definitions go into the "hardware" folder
 // Choose/change a file from there
 #include "hardware/esp32.h"
-#define myCLK 14
-#define myMISO 2
-#define myMOSI 12 //was 12 not reloading properly
-#define SS 13
-#define LED 25
-//#define SDINIT 18=clk,19=miso,23=mosi,5=cs
-#define SDINIT myCLK,myMISO,myMOSI,SS// VGA32
-//#define SDINIT 18,19,23,5
+#define SS 13. //Bug fix, you have to define this because later it is used by SD.init. This was missed out on the master branch.
+#define LED 5
+#define SDINIT 14,2,12,SS// VGA32 MOSI 12 may not reload properly with sd card in slot
 
 // Delays for LED blinking
 #define sDELAY 50
 #define DELAY 100
 
+//Define this to use the VGA screen/keyboard as a terminal
 #define FABGL true
 
 #ifdef FABGL
 #include "fabgl.h"
-
 fabgl::VGA16Controller DisplayController;
 fabgl::PS2Controller     PS2Controller;
 fabgl::Terminal          Terminal;
-
 #include "confdialog.h"
-
 #endif
 
 #include "abstraction_arduino.h"
@@ -69,17 +62,13 @@ void setup(void) {
   digitalWrite(LED, LOW);
 
 #ifdef FABGL
-
   preferences.begin("RunCPM", false);
-
   PS2Controller.begin(PS2Preset::KeyboardPort0);
 
-// Use GPIO 22-21 for red, GPIO 19-18 for green, GPIO 5-4 for blue, GPIO 23 for HSync and GPIO 15 for VSync
-  DisplayController.begin();
+// Options for non-defaukt pins, Use GPIO 22-21 for red, GPIO 19-18 for green, GPIO 5-4 for blue, GPIO 23 for HSync and GPIO 15 for VSync
 //  DisplayController.begin(GPIO_NUM_22,GPIO_NUM_21,GPIO_NUM_19,GPIO_NUM_18,GPIO_NUM_5,GPIO_NUM_17,GPIO_NUM_23,GPIO_NUM_16);
-
-//  DisplayController.setResolution();
-    DisplayController.setResolution(VGA_640x480_60Hz);
+  DisplayController.begin(); //default
+  DisplayController.setResolution(VGA_640x480_60Hz);
 
   Terminal.begin(&DisplayController);
   Terminal.connectLocally();      // to use Terminal.read(), available(), etc..
