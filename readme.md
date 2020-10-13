@@ -27,14 +27,14 @@ UPDATE 11Oct2020:
 The VGA32 ESP v1.4 uses GPIO12 (MTDI, read on pwerup/reset). This pin determines the voltage for the RAM, Voltage of Internal LDO (VDD_SDIO). When the SD card is present it pulls this pin high and the ESP32 thinks that the RAM voltage should be 1.8V, without the SD card this pin has internal pull-down to set the RAM voltage to 3.3V.
 This is actually mentioned in the notes from examples provided on the FABGL project, to quote:
 
-// notes about GPIO 2 and 12
-//    - GPIO2:  may cause problem on programming. GPIO2 must also be either left unconnected/floating, or driven Low, in order to enter the serial bootloader.
-//              In normal boot mode (GPIO0 high), GPIO2 is ignored.
-//    - GPIO12: should be avoided. It selects flash voltage. To use it disable GPIO12 detection setting efuses with:
-//                    python espefuse.py --port /dev/cu.SLAB_USBtoUART set_flash_voltage 3.3V
-//                       WARN!! Good for ESP32 with 3.3V voltage (ESP-WROOM-32). This will BRICK your ESP32 if the flash isn't 3.3V
-//                       NOTE1: replace "/dev/cu.SLAB_USBtoUART" with your serial port
-//                       NOTE2: espefuse.py is downloadable from https://github.com/espressif/esptool
+ notes about GPIO 2 and 12
+    - GPIO2:  may cause problem on programming. GPIO2 must also be either left unconnected/floating, or driven Low, in order to enter the serial bootloader.
+              In normal boot mode (GPIO0 high), GPIO2 is ignored.
+    - GPIO12: should be avoided. It selects flash voltage. To use it disable GPIO12 detection setting efuses with:
+                    python espefuse.py --port /dev/cu.SLAB_USBtoUART set_flash_voltage 3.3V
+                       WARN!! Good for ESP32 with 3.3V voltage (ESP-WROOM-32). This will BRICK your ESP32 if the flash isn't 3.3V
+                       NOTE1: replace "/dev/cu.SLAB_USBtoUART" with your serial port
+                       NOTE2: espefuse.py is downloadable from https://github.com/espressif/esptool
 
 This further notes that GPIO12 should be avoided, a pitty no one told the maker of the VGA32 ESP card!
 
