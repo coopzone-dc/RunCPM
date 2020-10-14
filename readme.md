@@ -2,9 +2,9 @@
 
 **** This version has been modified (in progress) to use the the FABGL library for ESP32 ****
 
-please see https://github.com/fdivitto/FabGL for the library used.
+Please see http://www.fabglib.org/ the library used. Note the version used is installed from the Arduino IDE (the version on the github is improved but not compatable with the Arduino version, if anyone want to help or have a go at using the github version go for it, I may try myself time permitting.)
 
-You get a full 80x36 console on a VGA screen and keyboard. It can save your preferences (in the same way as ANSI TERMIAL Does.)
+You get a full 80x34 console on a VGA screen and keyboard. It can save your preferences (in the same way as ANSI TERMINAL Does.)
 
 No changes have been made the the other versions of RunCPM, just the esp version.
 
