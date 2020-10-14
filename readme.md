@@ -2,7 +2,7 @@
 
 **** This version has been modified (in progress) to use the the FABGL library for ESP32 ****
 
-Please see http://www.fabglib.org/ the library used. Note the version used is installed from the Arduino IDE (the version on the github is improved but not compatable with the Arduino version, if anyone want to help or have a go at using the github version go for it, I may try myself time permitting.)
+Please see http://www.fabglib.org/ for the library used. Note the version used is installed from the Arduino IDE (the version on the github is improved but not compatable with the Arduino version, if anyone wants to help or have a go at using the github version go for it, I may try myself time permitting.)
 
 You get a full 80x34 console on a VGA screen and keyboard. It can save your preferences (in the same way as ANSI TERMINAL Does.)
 
@@ -50,6 +50,8 @@ When you build this version, make sure you use the IDE library manager to add th
 ![https://github.com/coopzone-dc/RunCPM/blob/master/Docs/IMG_0563.jpg](https://github.com/coopzone-dc/RunCPM/blob/master/Docs/IMG_0563.jpg)
 
 ***************************************************************************************
+
+# Original text continues....
 
 RunCPM is an application which can execute vintage CP/M 8 bits programs on many modern platforms, like Windows, Mac OS X, Linux, FreeBSD, MS-DOS, Arduino DUE and variants, like the Teensy or ESP32. It can be built both on 32 and 64 bits host environments and should be easily portable to other platforms.<br>
 RunCPM is fully written in C and in a modular way, so porting to other platforms should be only a matter of writing an abstraction layer file for it. No modification to the main code modules should be necessary.
