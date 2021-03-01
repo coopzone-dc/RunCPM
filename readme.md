@@ -1,5 +1,11 @@
 # RunCPM - Z80 CP/M 2.2 emulator
 
+**** Latest version updated. This Github repo was originally created against version 4.1 of RunCPM.
+A new version has been created based on version 5.1 (work kindly done by Guido Lehwalder)
+Thanks to him for the work in patching this version. I have put a copy of his work in the folder called
+RunCPM_VGA32_v5_1. It is not a full copy of RunCPM, just the version that can be compiled for
+the ESP-32 as described below.
+
 **** This version has been modified (in progress) to use the the FABGL library for ESP32 ****
 
 Please see http://www.fabglib.org/ for the library used. Note the version used is installed from the Arduino IDE (the version on the github is improved but not compatable with the Arduino version, if anyone wants to help or have a go at using the github version go for it, I may try myself time permitting.)
