@@ -4,6 +4,15 @@
 
 #include <SdFat.h>  // One SD library to rule them all - Greinman SdFat from Library Manager
 
+
+// #########################################################################################
+// #########################################################################################
+// To compile this version of the .ino you need the the FabGL-master from github
+// which includes the Commits from Mar 15, 2021 in your FabGL-library path of the
+// ARDUINO-IDE
+// #########################################################################################
+// #########################################################################################
+
 // =========================================================================================
 // TTGO Hardware Definition
 // =========================================================================================
@@ -74,7 +83,7 @@ void setup(void) {
   digitalWrite(LED, LOW);
 
 // =========================================================================================
-// FabGL Displaycontroller IF part
+// FabGL Displaycontroller start of IF part
 // =========================================================================================
 
 #ifdef FABGL
@@ -89,15 +98,47 @@ void setup(void) {
   DisplayController.setResolution(VGA_640x480_60Hz);
 
   Terminal.begin(&DisplayController);
-  Terminal.connectLocally();      // to use Terminal.read(), available(), etc..
 
   ConfDialogApp::loadConfiguration();
-
+  
   Terminal.enableCursor(true);
+
+// =========================================================================================
+// Set BOLD-Attribute (to bright-yellow) or configured color
+// =========================================================================================  
+  // already loaded via loadConfiguration in configdialog.h
+  // Terminal.setColorForAttribute(CharStyle::Bold, ConfDialogApp::getBDColor(), true);
+
+// =========================================================================================
+// If Boot-Info is enabled show Boot-Info
+// =========================================================================================
+
+  if (ConfDialogApp::getBootInfo() == BOOTINFO_ENABLED) {
+    Terminal.clear();
+    //Terminal.write("Boot-Info\r\n");
+    Terminal.write("____________________________________________\r\n");
+    Terminal.printf("Screen Size        :  %d x %d\r\n", DisplayController.getScreenWidth(), DisplayController.getScreenHeight());
+    Terminal.printf("Terminal Size      :   %d x %d\r\n", Terminal.getColumns(), Terminal.getRows());
+    Terminal.printf("Keyboard Layout    :   %s\r\n", PS2Controller.keyboard()->isKeyboardAvailable() ? SupportedLayouts::names()[ConfDialogApp::getKbdLayoutIndex()] : "No Keyboard");
+    Terminal.printf("Terminal Type      :   %s\r\n", SupportedTerminals::names()[(int)ConfDialogApp::getTermType()]);
+    Terminal.printf("Free Memory        :   %d bytes\r\n", heap_caps_get_free_size(MALLOC_CAP_32BIT));
+    Terminal.printf("Version            :   %d.%d\r\n", TERMVERSION_MAJ, TERMVERSION_MIN);
+    Terminal.write("____________________________________________\r\n");
+    Terminal.write("Press BREAK  [Ctrl+PAUSE]    to reboot\r\n");
+    Terminal.write("Press F12 to change terminal configuration\r\n");
+//    Terminal.write("    and CTRL-ALT-F12 to reset settings\r\n");
+  } else if (ConfDialogApp::getBootInfo() == BOOTINFO_TEMPDISABLED) {
+    preferences.putInt("BootInfo", BOOTINFO_ENABLED);
+  }  
+
+// =========================================================================================
+// Press F12 for Config-Menue
+// =========================================================================================
 
   Terminal.onVirtualKey = [&](VirtualKey * vk, bool keyDown) {
     if (*vk == VirtualKey::VK_F12) {
-      if (!keyDown) {
+      if (!keyDown) 
+      {
         // releasing F12 key to open configuration dialog
         Terminal.deactivate();
         auto dlgApp = new ConfDialogApp;
@@ -105,10 +146,17 @@ void setup(void) {
         delete dlgApp;
         Terminal.keyboard()->emptyVirtualKeyQueue();
         Terminal.activate();
-      } else {
-        // pressing CTRL + ALT + F12, reset parameters and reboot
-        if ((Terminal.keyboard()->isVKDown(VirtualKey::VK_LCTRL) || Terminal.keyboard()->isVKDown(VirtualKey::VK_RCTRL)) &&
-            (Terminal.keyboard()->isVKDown(VirtualKey::VK_LALT) || Terminal.keyboard()->isVKDown(VirtualKey::VK_RALT))) {
+
+      } 
+      
+      else 
+// =========================================================================================
+// If like above F12 is pressed check for Ctrl+ALT for Config-Reset
+// =========================================================================================
+      {
+    
+     if ((Terminal.keyboard()->isVKDown(VirtualKey::VK_LCTRL) || Terminal.keyboard()->isVKDown(VirtualKey::VK_RCTRL)) &&
+         (Terminal.keyboard()->isVKDown(VirtualKey::VK_LALT) || Terminal.keyboard()->isVKDown(VirtualKey::VK_RALT))) {
           Terminal.write("\r\nReset of terminal settings...");
           preferences.clear();
           delay(2000);
@@ -119,24 +167,65 @@ void setup(void) {
       }
       *vk = VirtualKey::VK_NONE;
     }
-  };
+
 // =========================================================================================
+// Press BREAK for reboot
+// =========================================================================================
+
+    if (*vk == VirtualKey::VK_BREAK) {
+      if (!keyDown) {
+        // releasing BREAK key to reboot
+        Terminal.write("\r\n");
+        Terminal.write("\r\n______________________________");
+        Terminal.write("\r\nReboot requested via BREAK-Key");
+        Terminal.write("\r\nRebooting in 2 seconds...");
+        Terminal.write("\r\n______________________________");
+        delay(2000);
+        ESP.restart();
+      } 
+      *vk = VirtualKey::VK_NONE;
+    }
+
+// =========================================================================================
+// Key-click
+// =========================================================================================
+
+  // {
+    if (ConfDialogApp::getKeyClick() == KEYCLICK_ENABLED) {
+    if (keyDown)
+      // Terminal.soundGenerator()->playSound(VICNoiseGenerator(), (*vk == VirtualKey::VK_RETURN ? 90 : 120), 10);;
+      Terminal.soundGenerator()->playSound(SquareWaveformGenerator(), (*vk == VirtualKey::VK_RETURN ? 500 : 1000), 4);;
+    }
+ //  };
+  
+
+// =========================================================================================
+// FabGL if end  
+// =========================================================================================
+
+  };
+
 #else
   Serial.begin(SERIALSPD);
-  while (!Serial) {	// Wait until serial is connected
+  while (!Serial) {  // Wait until serial is connected
     digitalWrite(LED, HIGH^LEDinv);
     delay(sDELAY);
     digitalWrite(LED, LOW^LEDinv);
     delay(sDELAY);
   }
 #endif
+
 // =========================================================================================
 
 #ifdef DEBUGLOG
   _sys_deletefile((uint8 *)LogName);
 #endif
 
-_clrscr();
+// =========================================================================================
+// Show RunCPM-Info at Boot
+// =========================================================================================
+
+// _clrscr();
 _puts("____________________________________________\r\n");
 _puts("  CP/M 2.2 Emulator v" VERSION " by Marcelo Dantas \r\n");
 _puts("  using FabGL Terminal   by @fdivitto                     \r\n");
@@ -167,7 +256,7 @@ _puts("____________________________________________\r\n");
       while (true) {
         _puts(CCPHEAD);
         _PatchCPM();
-	Status = 0;
+  Status = 0;
 #ifndef CCP_INTERNAL
         if (!_RamLoad((char *)CCPname, CCPaddr)) {
           _puts("Unable to load the CCP.\r\nCPU halted.\r\n");
