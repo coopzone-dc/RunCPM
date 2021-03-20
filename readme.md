@@ -6,6 +6,8 @@ Thanks to him for the work in patching this version. I have put a copy of his wo
 RunCPM_VGA32_v5_1. It is not a full copy of RunCPM, just the version that can be compiled for
 the ESP-32 as described below.
 
+**** See the section about sdcard libraries in building dependancies.
+
 **** This version has been modified (in progress) to use the the FABGL library for ESP32 ****
 
 Please see http://www.fabglib.org/ for the library used. Note the version used is installed from the Arduino IDE (the version on the github is improved but not compatable with the Arduino version, if anyone wants to help or have a go at using the github version go for it, I may try myself time permitting.)
@@ -279,13 +281,23 @@ I have seen reports of people being able to run it on the Nucleo F401re, Nucleo 
 It was also successfully built and ran on the Kindle Keyboard 3G.
 
 ## Building dependencies
-
-For the Arduino DUE, support for it needs to be added through the board manager.<br>
-For the Teensy follow the instructions from here: https://www.pjrc.com/teensy/td_download.html<br>
-For the ESP32 follow the instructions from here: https://randomnerdtutorials.com/installing-the-esp32-board-in-arduino-ide-windows-instructions/<br>
-For the STM32 follow the instructions from here: https://github.com/stm32duino/Arduino_Core_STM32<br>
-All boards now use the SdFat library, from here: https://github.com/greiman/SdFat/<br>
+For the Arduino DUE, support for it needs to be added through the board manager.
+For the Teensy follow the instructions from here: https://www.pjrc.com/teensy/td_download.html
+For the ESP32 follow the instructions from here: https://randomnerdtutorials.com/installing-the-esp32-board-in-arduino-ide-windows-instructions/
+For the STM32 follow the instructions from here: https://github.com/stm32duino/Arduino_Core_STM32
+All boards now use the SdFat 2.x library, from here: https://github.com/greiman/SdFat/
 All Arduino libraries can be found here: https://www.arduinolibraries.info/
+
+SdFat library change
+If you get a 'File' has no member named 'dirEntry' error, then a modification is needed on the SdFat Library SdFatConfig.h file (line 78 as of version 2.0.2) changing:
+#define SDFAT_FILE_TYPE 3
+to
+#define SDFAT_FILE_TYPE 1
+As file type 1 is required for most of the RunCPM ports.
+
+To find your libraries folder, open the Preferences in Arduino IDE and look at the Sketchbook location field.
+
+On Windows systems, SdFatConfig.h will be in Documents\Arduino\libraries\SdFat\src
 
 ## Teensy 4.1
 Building for the Teensy 4.1 requires using Greiman's SdFat-beta library, as it is not supported (yet) by the regular SdFat.<br>
